@@ -1,0 +1,32 @@
+{
+  "name": "discord-logify",
+  "version": "0.0.1",
+  "description": "this npm package is focused to send the log to your private discord server",
+  "keywords": [
+    "discordLogger",
+    "logger"
+  ],
+  "homepage": "https://github.com/txuli/discord-logify#readme",
+  "bugs": {
+    "url": "https://github.com/txuli/discord-logify/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/txuli/discord-logify.git"
+  },
+  "license": "ISC",
+  "author": "txuli",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"tsup src/index.ts --format esm,cjs --dts"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "prettier": "^3.8.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
