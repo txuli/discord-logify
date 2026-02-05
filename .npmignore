@@ -1,0 +1,12 @@
+src/
+bin/
+node_modules/
+.env
+.git/
+.gitignore
+*.log
+logger-config.json
+tsconfig.json
+tscofig.json
+.eslintrc*
+.prettierrc*

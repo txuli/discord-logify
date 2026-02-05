@@ -1,12 +1,19 @@
 {
   "name": "discord-logify",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "description": "this npm package is focused to send the log to your private discord server",
+  "description": "Advanced logging system that sends logs to Discord via webhooks",
   "keywords": [
-    "discordLogger",
-    "logger"
+    "discord",
+    "logger",
+    "logging",
+    "webhook",
+    "discord-logger",
+    "discord-webhook"
   ],
+  "bin": {
+    "logify": "./dist/cli.js"
+  },
   "homepage": "https://github.com/txuli/discord-logify#readme",
   "bugs": {
     "url": "https://github.com/txuli/discord-logify/issues"
@@ -20,17 +27,26 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup src/index.ts --format esm,cjs --dts"
+    "build": "tsup src/index.ts bin/cli.ts --format esm,cjs --dts",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "eslint": "^9.39.2",
     "prettier": "^3.8.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "commander": "^13.1.0"
+    "commander": "^13.1.0",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.4"
   }
 }
