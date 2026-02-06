@@ -1,6 +1,6 @@
 {
   "name": "discord-logify",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "type": "module",
   "description": "Advanced logging system that sends logs to Discord via webhooks",
   "keywords": [
@@ -12,7 +12,7 @@
     "discord-webhook"
   ],
   "bin": {
-    "logify": "./dist/cli.js"
+    "logify": "./dist/bin/cli.js"
   },
   "homepage": "https://github.com/txuli/discord-logify#readme",
   "bugs": {
@@ -24,9 +24,9 @@
   },
   "license": "ISC",
   "author": "txuli",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "module": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist",
     "README.md",

@@ -88,8 +88,6 @@ export class log {
     }
 }
 
-const logger = new log()
-logger.Alert("aaa")
 
 
 
