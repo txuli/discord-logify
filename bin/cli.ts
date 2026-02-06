@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { log } from '../src/index.ts';
-import { setup } from '../src/commands/setup.ts';
-import { toggleLogFile, setLogFile, getConfig } from '../src/utils/config.ts';
+import { log } from '../src/index';
+import { setup } from '../src/commands/setup';
+import { toggleLogFile, setLogFile, getConfig } from '../src/utils/config';
 
 const program = new Command();
 const logger = new log();

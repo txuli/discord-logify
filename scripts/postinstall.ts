@@ -5,16 +5,16 @@
  * Prompts user for webhook setup on first installation
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
-import readline from 'node:readline';
+import { existsSync, appendFile, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { createInterface } from 'node:readline';
 
-const envPath = path.join(process.cwd(), '.env');
-
-
+const envPath = join(process.cwd(), '.env');
 
 
-const rl = readline.createInterface({
+
+
+const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -34,15 +34,15 @@ rl.question('\n📝 Enter your Discord webhook URL:\n> ', (webhookUrl) => {
 
   const envContent = `WEBHOOK_URL=${webhookUrl}`;
 
-  if(fs.existsSync(envPath)){
-    fs.appendFile(envPath, '\n'+envContent, 'utf-8', (err) => {
+  if(existsSync(envPath)){
+    appendFile(envPath, '\n'+envContent, 'utf-8', (err) => {
       if (err) {
         console.error('Error writing to .env file:', err);
         process.exit(1);
       }
     });
   }else{
-    fs.writeFileSync(envPath, envContent, 'utf-8');
+    writeFileSync(envPath, envContent, 'utf-8');
   }
 
   console.log('\n \x1b[32m Webhook configured successfully! \x1b[0m');

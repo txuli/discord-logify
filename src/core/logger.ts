@@ -3,9 +3,9 @@
  * Handles logging to console, file, and Discord webhook
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { edit, send } from './webhook.ts';
+import { existsSync, writeFileSync, readFileSync, appendFile } from 'node:fs';
+import * as path from 'node:path';
+import { edit, send } from './webhook';
 
 export type logLevel = {
     color: string;
@@ -29,18 +29,18 @@ export class log {
     }
 
     private loadConfig() {
-        if (!fs.existsSync(this.configPath)) {
-            fs.writeFileSync(this.configPath, '{"logFile":false}');
+        if (!existsSync(this.configPath)) {
+            writeFileSync(this.configPath, '{"logFile":false}');
         } else {
-            const data = fs.readFileSync(this.configPath, 'utf-8');
+            const data = readFileSync(this.configPath, 'utf-8');
             const parsedData = JSON.parse(data) as Record<string, logLevel | boolean>;
             this.config = new Map(Object.entries(parsedData));
             const check = this.config.get('logFile');
             this.logFile = typeof check === 'boolean' ? check : false;
         }
 
-        if (this.logFile && !fs.existsSync(this.logPath)) {
-            fs.writeFileSync(this.logPath, '');
+        if (this.logFile && !existsSync(this.logPath)) {
+            writeFileSync(this.logPath, '');
         }
     }
 
@@ -95,7 +95,7 @@ export class log {
    
     public addLogLevel(prefix: string, logColor: string, logTag: string): void {
         this.config.set(prefix, { color: logColor, prefix: prefix, text: logTag });
-        fs.writeFileSync(this.configPath, JSON.stringify(Object.fromEntries(this.config)), 'utf-8');
+        writeFileSync(this.configPath, JSON.stringify(Object.fromEntries(this.config)), 'utf-8');
     }
 
     /**
@@ -126,7 +126,7 @@ export class log {
      */
     private writeLogFile(log: string) {
         if (this.logFile) {
-            fs.appendFile(this.logPath, log, (err) => {
+            appendFile(this.logPath, log, (err) => {
                 if (err) {
                     console.error('Failed to write to log file:', err);
                 }
