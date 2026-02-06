@@ -315,14 +315,14 @@ https://github.com/txuli/discord-logify/issues
 
 ## 📚 Changelog
 
-### v0.2.0
+### v0.1.4
 - ✨ Interactive post-install setup script (TypeScript)
 - 🔧 Improved project structure (core, commands, utils)
 - 🎯 Better CLI commands (setup, add-log, logFile, config)
 - 📦 Configuration management improvements
 - 🛡️ Enhanced webhook validation
 
-### v0.1.4
+### v0.1.3
 - ✨ Migrated from discord.js to native fetch
 - 🎨 Improved ANSI color support
 - 💾 Added optional file logging
@@ -333,4 +333,3 @@ https://github.com/txuli/discord-logify/issues
 
 ⭐ If you like this project, give it a star on GitHub!
 
-Made with ❤️ by asier
