@@ -1,14 +1,17 @@
 # Discord Logify
 
-A lightweight Discord logger that captures and forwards server events to webhooks for easy monitoring and auditing
+A lightweight and powerful logging system that sends formatted logs to Discord via webhooks, with zero external dependencies for Discord integration.
 
 ## 🚀 Features
 
--  Multiple predefined log levels (Info, Alert, Error)
--  Customizable log levels with colors and tags
--  Automatic log sending to Discord
--  Buffer system to optimize message delivery
--  CLI for configuration management
+- 📝 Multiple predefined log levels (Info, Alert, Error)
+- 🎨 Customizable log levels with ANSI colors and tags
+- 🔄 Automatic log buffering and batching for Discord
+- 💾 Optional local file logging
+- 🎯 Message editing to reduce Discord spam
+- 🕒 Automatic timestamps on all logs
+- 🛠️ CLI for easy configuration
+- 🌈 ANSI color support in Discord and terminal
 
 ## 📦 Installation
 
@@ -18,14 +21,58 @@ npm install discord-logify
 
 ## ⚙️ Configuration
 
-### Environment Variables
+### Automatic Setup (On Installation)
 
-Create a `.env` file in the root of your project:
+When you install `discord-logify`, an interactive setup script will prompt you to enter your Discord webhook URL:
+
+```
+Welcome to Discord Logify!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 Enter your Discord webhook URL:
+> https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN
+
+✅ Webhook configured successfully!
+```
+
+The script will automatically extract your webhook ID and token, creating a `.env` file with:
 
 ```env
+WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
 WEBHOOK_ID=YOUR_WEBHOOK_ID
 WEBHOOK_TOKEN=YOUR_WEBHOOK_TOKEN
 ```
+
+### Manual Configuration
+
+If you need to reconfigure your webhook:
+
+1. Create a `.env` file in your project root
+2. Add your webhook URL:
+
+```env
+WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
+```
+
+### Get Your Webhook URL
+
+1. Go to your Discord server
+2. Right-click on a channel → **Edit Channel**
+3. Go to **Integrations** → **Webhooks**
+4. Click **New Webhook** or copy an existing one
+5. Copy the **Webhook URL**
+
+### Enable File Logging (Optional)
+
+Edit `logger-config.json` in your project root:
+
+```json
+{
+  "logFile": true
+}
+```
+
+Logs will be saved to `logify.log` in your project root.
 
 ## 💻 Usage
 
@@ -40,21 +87,28 @@ const logger = new log();
 ### Predefined Log Levels
 
 ```typescript
-// Information log
+// Information log (cyan)
 logger.Info('Application started successfully');
 
-// Warning log
+// Warning log (yellow)
 logger.Alert('Warning: Slow connection detected');
 
-// Error log
+// Error log (red)
 logger.Error('Error processing request');
+```
+
+**Output example:**
+```
+[06/02/2026 15:30:45] [INFO] Application started successfully
+[06/02/2026 15:30:46] [WARN] Warning: Slow connection detected
+[06/02/2026 15:30:47] [ERROR] Error processing request
 ```
 
 ### Custom Log Levels
 
 ```typescript
 // Add a custom log level
-logger.addLogLevel('debug', '\x1b[35m', '[DEBUG]');
+logger.addLogLevel('debug', '35m', '[DEBUG]');
 
 // Use the custom level
 logger.Log('Debug message', 'debug');
@@ -62,25 +116,59 @@ logger.Log('Debug message', 'debug');
 
 ## 🎨 ANSI Color Codes
 
-- `\x1b[31m` - Red (Error)
-- `\x1b[33m` - Yellow (Warning)
-- `\x1b[36m` - Cyan (Info)
-- `\x1b[35m` - Magenta
-- `\x1b[32m` - Green
-- `\x1b[0m` - Reset
+When adding custom log levels, use these color codes (without `\x1b[`):
+
+- `31m` - Red (Error)
+- `33m` - Yellow (Warning)
+- `36m` - Cyan (Info)
+- `35m` - Magenta
+- `32m` - Green
+- `34m` - Blue
+- `37m` - White
+
+**Example:**
+```typescript
+logger.addLogLevel('success', '32m', '[SUCCESS]'); // Green
+logger.addLogLevel('critical', '31m', '[CRITICAL]'); // Red
+```
 
 ## 🛠️ CLI
 
-### Add a Log Level
+### Setup Webhook (Manual)
 
 ```bash
-logify add-log "prefix" -c "color_code" -t "[TAG]"
+logify setup <webhook_id> <webhook_token>
 ```
 
-Example:
+This creates a `.env` file with your webhook credentials if one doesn't already exist.
+
+### Add a Custom Log Level
+
 ```bash
-logify add-log "debug" -c "\x1b[35m" -t "[DEBUG]"
+logify add-log <prefix> -c <color_code> -t <tag>
 ```
+
+**Example:**
+```bash
+logify add-log debug -c "35m" -t "[DEBUG]"
+logify add-log success -c "32m" -t "[SUCCESS]"
+```
+
+### View Configuration
+
+```bash
+logify config
+```
+
+Shows all custom log levels in your `logger-config.json`.
+
+### Toggle File Logging
+
+```bash
+logify logFile
+```
+
+Toggles the file logging feature on/off.
 
 ## 📁 Configuration File
 
@@ -88,20 +176,44 @@ Custom log levels are stored in `logger-config.json`:
 
 ```json
 {
+  "logFile": true,
   "debug": {
-    "color": "\x1b[35m",
+    "color": "35m",
     "prefix": "debug",
     "text": "[DEBUG]"
+  },
+  "success": {
+    "color": "32m",
+    "prefix": "success",
+    "text": "[SUCCESS]"
   }
 }
 ```
 
 ## 🔄 How It Works
 
-1. Messages are added to a buffer
-2. After 1 second of inactivity, logs are sent to Discord
-3. Subsequent messages edit the previous message to reduce spam
-4. Logs are also displayed in the console with colors
+1. **Buffering**: Logs are added to an internal buffer
+2. **Batching**: After 1 second of inactivity, all buffered logs are sent to Discord
+3. **Message Editing**: Subsequent log batches edit the previous Discord message to reduce spam
+4. **ANSI Rendering**: Discord renders ANSI color codes using markdown code blocks
+5. **Local Logging**: Optionally writes logs to `logify.log` (without ANSI codes)
+6. **No Dependencies**: Uses native Node.js `fetch` API (Node 18+)
+
+## 📋 Full API Reference
+
+### `log` Class
+
+#### Methods
+
+- `Info(msg: string)`: Log an info message (cyan)
+- `Alert(msg: string)`: Log a warning message (yellow)
+- `Error(msg: string)`: Log an error message (red)
+- `Log(msg: string, prefix: string)`: Log with a custom level
+- `addLogLevel(prefix: string, color: string, tag: string)`: Add a custom log level
+
+### Environment Variables
+
+- `WEBHOOK_URL`: Full Discord webhook URL (required)
 
 ## 📝 Complete Example
 
@@ -110,17 +222,71 @@ import { log } from 'discord-logify';
 
 const logger = new log();
 
-// Add a custom level
-logger.addLogLevel('success', '\x1b[32m', '[SUCCESS]');
+// Add custom levels
+logger.addLogLevel('success', '32m', '[✓]');
+logger.addLogLevel('debug', '35m', '[DEBUG]');
+logger.addLogLevel('critical', '31m', '[ CRITICAL]');
 
 // Use different log levels
 logger.Info('Server started on port 3000');
 logger.Log('User authenticated successfully', 'success');
+logger.Log('Debugging user session', 'debug');
 logger.Alert('RAM usage at 80%');
 logger.Error('Database connection failed');
+logger.Log('CRITICAL: System overload!', 'critical');
 ```
 
-## 🤝 Contributing
+**Discord Output:**
+```ansi
+[06/02/2026 15:30:45] [INFO] Server started on port 3000
+[06/02/2026 15:30:45] [✓] User authenticated successfully
+[06/02/2026 15:30:45] [DEBUG] Debugging user session
+[06/02/2026 15:30:46] [WARN] RAM usage at 80%
+[06/02/2026 15:30:47] [ERROR] Database connection failed
+[06/02/2026 15:30:47] [ CRITICAL] CRITICAL: System overload!
+```
+
+## 💡 Use Cases
+
+- 🖥️ **Server Monitoring**: Track application health and errors
+- 🔍 **Debugging**: Real-time debug logs in Discord
+- 📊 **Event Tracking**: Log important business events
+- 🚨 **Alert System**: Get notified of critical issues
+- 📈 **Analytics**: Track user actions and metrics
+- 🛡️ **Security**: Monitor suspicious activities
+
+## Requirements
+
+- Node.js 18+ (for native `fetch` API)
+- Discord webhook URL
+- `dotenv` package (included as dependency)
+
+## FAQ & Troubleshooting
+
+### Logs not appearing in Discord?
+
+1. Verify your `WEBHOOK_URL` in `.env`
+2. Check the webhook still exists in Discord
+3. Ensure your Node.js version is 18+
+
+### Colors not showing in Discord?
+
+Logs must be sent in ANSI code blocks. The library handles this automatically.
+
+### How to view colored logs in log file?
+
+Use a terminal viewer that supports ANSI:
+```bash
+less -R logify.log
+# or
+bat logify.log
+```
+
+### Message rate limiting?
+
+Discord webhooks have rate limits. The 1-second buffer helps batch logs to avoid hitting limits.
+
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -130,21 +296,41 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 ISC
 
 ## 👤 Author
 
-**txuli**
+**asier**
 
-- GitHub: [@txuli](https://github.com/txuli)
+- GitHub: [@asier](https://github.com/asier)
+- Repository: [discord-logify](https://github.com/asier/discord-logify)
 
-## 🐛 Report Bugs
+## Report Bugs
 
 If you find a bug, please open an issue at:
 https://github.com/txuli/discord-logify/issues
 
+
+## 📚 Changelog
+
+### v0.2.0
+- ✨ Interactive post-install setup script (TypeScript)
+- 🔧 Improved project structure (core, commands, utils)
+- 🎯 Better CLI commands (setup, add-log, logFile, config)
+- 📦 Configuration management improvements
+- 🛡️ Enhanced webhook validation
+
+### v0.1.4
+- ✨ Migrated from discord.js to native fetch
+- 🎨 Improved ANSI color support
+- 💾 Added optional file logging
+- 🕒 Enhanced timestamp formatting
+- 🔧 Better error handling
+
 ---
 
 ⭐ If you like this project, give it a star on GitHub!
+
+Made with ❤️ by asier
