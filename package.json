@@ -1,6 +1,6 @@
 {
   "name": "discord-logify",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "type": "module",
   "description": "Advanced logging system that sends logs to Discord via webhooks",
   "keywords": [
@@ -12,7 +12,7 @@
     "discord-webhook"
   ],
   "bin": {
-    "logify": "./dist/bin/cli.js"
+    "logify": "dist/bin/cli.js"
   },
   "homepage": "https://github.com/txuli/discord-logify#readme",
   "bugs": {
@@ -36,10 +36,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup src/index.ts bin/cli.ts --format esm,cjs --dts",
-    "postinstall": "node scripts/postinstall.ts || true",
     "prepublishOnly": "npm run build"
   },
-
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "eslint": "^9.39.2",
@@ -47,12 +45,10 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-
   "dependencies": {
     "commander": "^13.1.0",
     "dotenv": "^17.2.4"
   },
-
   "overrides": {
     "undici": "^6.23.0"
   }

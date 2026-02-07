@@ -21,39 +21,6 @@ npm install discord-logify
 
 ## ⚙️ Configuration
 
-### Automatic Setup (On Installation)
-
-When you install `discord-logify`, an interactive setup script will prompt you to enter your Discord webhook URL:
-
-```
-Welcome to Discord Logify!
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 Enter your Discord webhook URL:
-> https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN
-
-✅ Webhook configured successfully!
-```
-
-The script will automatically extract your webhook ID and token, creating a `.env` file with:
-
-```env
-WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
-WEBHOOK_ID=YOUR_WEBHOOK_ID
-WEBHOOK_TOKEN=YOUR_WEBHOOK_TOKEN
-```
-
-### Manual Configuration
-
-If you need to reconfigure your webhook:
-
-1. Create a `.env` file in your project root
-2. Add your webhook URL:
-
-```env
-WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
-```
-
 ### Get Your Webhook URL
 
 1. Go to your Discord server
@@ -137,7 +104,7 @@ logger.addLogLevel('critical', '31m', '[CRITICAL]'); // Red
 ### Setup Webhook (Manual)
 
 ```bash
-logify setup <webhook_id> <webhook_token>
+logify setup <webhook_url>
 ```
 
 This creates a `.env` file with your webhook credentials if one doesn't already exist.
@@ -269,18 +236,6 @@ logger.Log('CRITICAL: System overload!', 'critical');
 2. Check the webhook still exists in Discord
 3. Ensure your Node.js version is 18+
 
-### Colors not showing in Discord?
-
-Logs must be sent in ANSI code blocks. The library handles this automatically.
-
-### How to view colored logs in log file?
-
-Use a terminal viewer that supports ANSI:
-```bash
-less -R logify.log
-# or
-bat logify.log
-```
 
 ### Message rate limiting?
 
@@ -312,24 +267,6 @@ ISC
 If you find a bug, please open an issue at:
 https://github.com/txuli/discord-logify/issues
 
-
-## 📚 Changelog
-
-### v0.1.4
-- ✨ Interactive post-install setup script (TypeScript)
-- 🔧 Improved project structure (core, commands, utils)
-- 🎯 Better CLI commands (setup, add-log, logFile, config)
-- 📦 Configuration management improvements
-- 🛡️ Enhanced webhook validation
-
-### v0.1.3
-- ✨ Migrated from discord.js to native fetch
-- 🎨 Improved ANSI color support
-- 💾 Added optional file logging
-- 🕒 Enhanced timestamp formatting
-- 🔧 Better error handling
-
----
 
 ⭐ If you like this project, give it a star on GitHub!
 
