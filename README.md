@@ -259,8 +259,8 @@ ISC
 
 **asier**
 
-- GitHub: [@asier](https://github.com/asier)
-- Repository: [discord-logify](https://github.com/asier/discord-logify)
+- GitHub: [@txuli](https://github.com/txuli)
+- Repository: [discord-logify](https://github.com/txuli/discord-logify)
 
 ## Report Bugs
 
