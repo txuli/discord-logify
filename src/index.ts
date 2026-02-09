@@ -8,7 +8,3 @@ import { log } from './core/logger';
 
 export { log };
 export type { logLevel } from './core/logger';
-
-
-const logger= new log()
-logger.Alert("aaaa")

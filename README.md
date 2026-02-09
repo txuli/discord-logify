@@ -257,7 +257,7 @@ ISC
 
 ## 👤 Author
 
-**asier**
+**txuli**
 
 - GitHub: [@txuli](https://github.com/txuli)
 - Repository: [discord-logify](https://github.com/txuli/discord-logify)
