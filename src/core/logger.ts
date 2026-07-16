@@ -16,7 +16,7 @@ export type logLevel = {
 let buffer: string[] = [];
 let timer: NodeJS.Timeout | null = null;
 let lastMessageId: string | null = null;
-const timeOut = 1000;
+const timeOut = 500;
 
 export class log {
     private logFile = false;
@@ -44,7 +44,6 @@ export class log {
         }
     }
 
-    
     private date(): string {
         const d = new Date();
         const day = String(d.getDate()).padStart(2, '0');
